@@ -174,6 +174,15 @@ The project uses Git for version control:
 - Use descriptive commit messages following conventional commits format
 - Push changes to the GitHub repository for collaboration and deployment
 
+##### Large Media Files
+
+Large media files (videos, high-resolution images) are excluded from git tracking to keep the repository size manageable:
+
+- Video files (mp4, mov, etc.) are excluded via .gitignore
+- These files should be managed separately and deployed directly to the production environment
+- For local development, team members should obtain these files through alternative means (shared drive, CDN, etc.)
+- Consider using Cloudflare Stream or similar services for video hosting in production
+
 ### Development Workflow
 
 #### Component Development
