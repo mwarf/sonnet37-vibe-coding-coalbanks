@@ -1,0 +1,259 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import { AnimatedCard, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/animated-card";
+import { motion } from "framer-motion";
+import { fadeInUp, fadeIn, staggerContainer } from "@/lib/animations";
+import { Target, Home, Wrench, Lightbulb } from "lucide-react";
+
+// Sample team data
+const team = [
+  {
+    name: "Jane Doe",
+    role: "Founder & Creative Director",
+    bio: "With over 15 years of experience in documentary filmmaking, Jane has a passion for authentic storytelling that connects communities.",
+    image: "/images/team-placeholder-1.jpg",
+  },
+  {
+    name: "John Smith",
+    role: "Cinematographer",
+    bio: "John brings a unique visual perspective to every project, with a background in landscape photography and documentary work.",
+    image: "/images/team-placeholder-2.jpg",
+  },
+  {
+    name: "Emily Johnson",
+    role: "Editor & Post-Production",
+    bio: "Emily's keen eye for narrative structure helps shape raw footage into compelling stories that resonate with audiences.",
+    image: "/images/team-placeholder-3.jpg",
+  },
+];
+
+// Timeline data for founder's journey
+const timeline = [
+  {
+    year: "2010",
+    title: "Early Beginnings",
+    description: "Started documenting local stories in Lethbridge with a small DSLR and a passion for authentic narratives.",
+  },
+  {
+    year: "2014",
+    title: "First Major Documentary",
+    description: "Released 'Coal and Community', exploring the history of mining in Southern Alberta and its impact on local culture.",
+  },
+  {
+    year: "2016",
+    title: "Coalbanks Creative Founded",
+    description: "Established Coalbanks Creative as a full-service video production company focused on documentary-style storytelling.",
+  },
+  {
+    year: "2018",
+    title: "Expanding the Team",
+    description: "Grew from a solo operation to a team of passionate storytellers and technical experts.",
+  },
+  {
+    year: "2020",
+    title: "Adapting to Change",
+    description: "Pivoted to remote production techniques during global challenges, developing new approaches to authentic storytelling.",
+  },
+  {
+    year: "2023",
+    title: "Looking Forward",
+    description: "Continuing to evolve our storytelling techniques while staying true to our commitment to authenticity and community connection.",
+  },
+];
+
+// Company values
+const values = [
+  {
+    title: "Authenticity",
+    description: "We believe in capturing genuine moments and telling real stories that resonate with audiences.",
+    icon: Target,
+  },
+  {
+    title: "Community",
+    description: "Our roots in Southern Alberta inform our approach to storytelling and our commitment to local narratives.",
+    icon: Home,
+  },
+  {
+    title: "Craftsmanship",
+    description: "We approach every project with attention to detail and a commitment to technical excellence.",
+    icon: Wrench,
+  },
+  {
+    title: "Innovation",
+    description: "While respecting traditional documentary techniques, we embrace new technologies that enhance storytelling.",
+    icon: Lightbulb,
+  },
+];
+---
+
+<BaseLayout title="About Coalbanks Creative | Our Story & Team">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-muted/30 py-20 md:py-28">
+    <div class="container-wide">
+      <div class="max-w-3xl">
+        <h1 class="heading-xl mb-6">Our Story</h1>
+        <p class="body-lg text-muted-foreground mb-8">
+          Coalbanks Creative combines deep community roots in Southern Alberta with technical innovation, delivering authentic storytelling through a friendly, accessible approach.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="heading-lg mb-6">Rooted in Southern Alberta</h2>
+          <div class="space-y-4 text-muted-foreground">
+            <p>
+              Our name—Coalbanks—directly connects to Lethbridge's origins and reflects our commitment to place-based storytelling. Just as coal seams built our community, we dig deep to find the authentic narratives that connect organizations to the people who matter most.
+            </p>
+            <p>
+              We're storytellers who use documentary techniques to capture what makes your organization genuinely special. Our approach combines technical expertise with a conversational, accessible style that removes barriers between clients and audiences.
+            </p>
+            <p>
+              While we use cutting-edge equipment and techniques, we never let technology overshadow the human element of storytelling. Our focus remains on authentic moments, genuine connections, and the unique character of Southern Alberta.
+            </p>
+          </div>
+          <div class="mt-8">
+            <Button client:visible size="lg">Our Services</Button>
+          </div>
+        </div>
+        
+        <div class="relative aspect-square w-full rounded-lg overflow-hidden">
+          <img 
+            src="/images/about-feature.jpg" 
+            alt="Coalbanks Creative team at work" 
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Founder's Journey Timeline -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <h2 class="heading-lg mb-12 text-center">Our Journey</h2>
+      
+      <div class="relative">
+        {/* Vertical line */}
+        <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-border"></div>
+        
+        <div class="space-y-12">
+          {timeline.map((item, index) => (
+            <motion.div 
+              client:visible
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ delay: index * 0.1 }}
+              className={`relative flex items-center ${index % 2 === 0 ? 'flex-row-reverse' : ''}`}
+            >
+              <div class="flex-1"></div>
+              
+              <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground z-10">
+                {item.year.substring(2)}
+              </div>
+              
+              <div class={`flex-1 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12'}`}>
+                <div class="bg-background p-6 rounded-lg shadow-sm">
+                  <div class="text-primary font-bold mb-1">{item.year}</div>
+                  <h3 class="text-xl font-semibold mb-2">{item.title}</h3>
+                  <p class="text-muted-foreground">{item.description}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Team Section -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg mb-4">Meet Our Team</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          We're a small team of passionate storytellers dedicated to capturing authentic moments and crafting compelling narratives.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {team.map((member, index) => (
+          <AnimatedCard client:visible delay={index * 0.1}>
+            <div class="relative aspect-square w-full overflow-hidden rounded-t-lg">
+              {member.name === "Jane Doe" ? (
+                <img 
+                  src="/images/team/michaelwarf.jpg" 
+                  alt={member.name} 
+                  class="w-full h-full object-cover"
+                />
+              ) : (
+                <div class="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground">
+                  <span class="text-4xl">{member.name[0]}</span>
+                </div>
+              )}
+            </div>
+            <CardHeader>
+              <CardTitle>{member.name}</CardTitle>
+              <CardDescription>{member.role}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p class="text-muted-foreground">{member.bio}</p>
+            </CardContent>
+          </AnimatedCard>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Values Section -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg mb-4">Our Values</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          These core principles guide our approach to every project and relationship.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {values.map((value, index) => (
+          <motion.div 
+            client:visible
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            transition={{ delay: index * 0.1 }}
+            className="bg-background rounded-lg p-8 shadow-sm text-center"
+          >
+            <value.icon className="h-12 w-12 mb-4 mx-auto text-primary" />
+            <h3 class="text-xl font-semibold mb-3">{value.title}</h3>
+            <p class="text-muted-foreground">{value.description}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="py-20 bg-primary text-primary-foreground">
+    <div class="container-wide">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="heading-lg mb-6">Ready to work with us?</h2>
+        <p class="text-primary-foreground/80 text-lg mb-8">
+          Let's collaborate to tell your story with the authenticity and craftsmanship it deserves.
+        </p>
+        <Button client:visible size="lg" variant="outline" class="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+          Get in Touch
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

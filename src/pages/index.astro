@@ -1,0 +1,220 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import { AnimatedCard, AnimatedCardGrid, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/animated-card";
+import { motion } from "framer-motion";
+import { fadeInUp, fadeIn, staggerContainer } from "@/lib/animations";
+import { Film, Theater, Video, Camera } from "lucide-react";
+
+// Sample data for featured work
+const featuredWork = [
+  {
+    title: "Lethbridge Heritage Documentary",
+    description: "Exploring the rich history of Southern Alberta through the stories of its people.",
+    image: "/images/portfolio/sample-project-id--thumb.jpg",
+    category: "Documentary",
+  },
+  {
+    title: "Mountain View Farms Brand Story",
+    description: "Capturing the authentic journey of a family-owned farm in the foothills.",
+    image: "/images/portfolio/sample-project-id--thumb.jpg",
+    category: "Brand Story",
+  },
+  {
+    title: "Alberta Arts Festival",
+    description: "Documenting the vibrant cultural scene of the annual arts celebration.",
+    image: "/images/portfolio/sample-project-id--thumb.jpg",
+    category: "Event Coverage",
+  },
+];
+
+// Sample data for services
+const services = [
+  {
+    title: "Documentary Production",
+    description: "In-depth storytelling that captures the essence of your subject with authenticity and care.",
+    icon: Film,
+  },
+  {
+    title: "Brand Storytelling",
+    description: "Compelling narratives that connect your audience to your brand's values and mission.",
+    icon: Theater,
+  },
+  {
+    title: "Commercial Production",
+    description: "High-quality video content that showcases your products and services with cinematic flair.",
+    icon: Video,
+  },
+  {
+    title: "Event Coverage",
+    description: "Comprehensive documentation of your events, from intimate gatherings to large-scale productions.",
+    icon: Camera,
+  },
+];
+
+// Sample data for clients
+const clients = ["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Client 6"];
+---
+
+<BaseLayout title="Coalbanks Creative | Documentary-Style Video Production in Southern Alberta">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-muted/30">
+    <!-- Video Background -->
+    <div class="absolute inset-0 z-0">
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="object-cover w-full h-full"
+        poster="/images/hero-background.jpg"
+      >
+        <source src="/videos/hero-background.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-background/50 via-background/50 to-background"></div>
+    </div>
+    
+    <div class="container-wide relative z-10 py-20 md:py-32 lg:py-40">
+      <div class="max-w-3xl">
+        <motion.h1 
+          client:load
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="heading-xl mb-6"
+        >
+          Authentic stories from Southern Alberta
+        </motion.h1>
+        
+        <motion.p 
+          client:load
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ delay: 0.2 }}
+          className="body-lg mb-8 text-muted-foreground"
+        >
+          We capture the genuine moments that make your story worth telling. Like the coal seams that built our community, we dig deep to find the authentic narratives that connect your work to the people who matter most.
+        </motion.p>
+        
+        <motion.div 
+          client:load
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ delay: 0.4 }}
+          className="flex flex-wrap gap-4"
+        >
+          <Button client:load size="lg">View Our Work</Button>
+          <Button client:load size="lg" variant="outline">Get in Touch</Button>
+        </motion.div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Work Section -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+        <div>
+          <h2 class="heading-lg mb-4">Featured Work</h2>
+          <p class="text-muted-foreground max-w-2xl">Explore our recent projects showcasing authentic stories from across Southern Alberta.</p>
+        </div>
+        <Button client:visible variant="outline" class="mt-4 md:mt-0">View All Projects</Button>
+      </div>
+      
+      <AnimatedCardGrid client:visible>
+        {featuredWork.map((project) => (
+          <AnimatedCard>
+            <div class="relative aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <CardHeader>
+              <div class="text-sm text-primary mb-1">{project.category}</div>
+              <CardTitle>{project.title}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button client:visible variant="outline" size="sm">Watch Project</Button>
+            </CardFooter>
+          </AnimatedCard>
+        ))}
+      </AnimatedCardGrid>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg mb-4">Our Services</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">We use documentary techniques to capture what makes your organization genuinely special.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {services.map((service, index) => (
+          <motion.div 
+            client:visible
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            transition={{ delay: index * 0.1 }}
+            className="bg-background rounded-lg p-6 shadow-sm"
+          >
+            <service.icon className="h-10 w-10 mb-4 text-primary" />
+            <h3 class="text-xl font-semibold mb-2">{service.title}</h3>
+            <p class="text-muted-foreground">{service.description}</p>
+          </motion.div>
+        ))}
+      </div>
+      
+      <div class="mt-12 text-center">
+        <Button client:visible size="lg">Learn More About Our Services</Button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Client Section -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <h2 class="heading-lg mb-4 text-center">Trusted By</h2>
+      <p class="text-muted-foreground max-w-2xl mx-auto text-center mb-12">We've had the privilege of working with organizations across Southern Alberta.</p>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        {clients.map((client, index) => (
+          <motion.div 
+            client:visible
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            transition={{ delay: index * 0.1 }}
+            className="flex items-center justify-center h-20 bg-muted/30 rounded-md"
+          >
+            <span class="font-medium">{client}</span>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="py-20 bg-primary text-primary-foreground">
+    <div class="container-wide">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="heading-lg mb-6">Ready to tell your story?</h2>
+        <p class="text-primary-foreground/80 text-lg mb-8">
+          Let's work together to capture the authentic moments that make your organization special.
+        </p>
+        <Button client:visible size="lg" variant="outline" class="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+          Get in Touch
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

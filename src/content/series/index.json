@@ -1,0 +1,18 @@
+{
+  "series": [
+    {
+      "id": "southern-alberta-storytelling",
+      "title": "Southern Alberta Storytelling Techniques",
+      "description": "A deep dive into regional storytelling approaches that capture the unique character and history of Southern Alberta.",
+      "posts": ["storytelling-part-1", "storytelling-part-2", "storytelling-part-3"],
+      "featuredImage": "/images/blog/series/storytelling.jpg"
+    },
+    {
+      "id": "video-production-essentials",
+      "title": "Video Production Essentials",
+      "description": "Core techniques and principles for creating professional documentary-style video content.",
+      "posts": ["production-essentials-1", "production-essentials-2"],
+      "featuredImage": "/images/blog/series/production.jpg"
+    }
+  ]
+}

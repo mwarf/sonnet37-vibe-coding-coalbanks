@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(2.24332,0,0,2.24332,-20.4468,-23.8876)">
+        <g transform="matrix(0.0130959,0,0,0.0130959,-5.40819,1.41726)">
+            <path d="M1653.32,704.884L2124.97,977.194L2124.97,1521.81L1653.32,1794.12L1181.66,1521.81L1181.66,977.194L1653.32,704.884Z" style="fill:none;stroke:white;stroke-width:50px;"/>
+        </g>
+        <g transform="matrix(0.0130959,0,0,0.0130959,-5.40819,1.41726)">
+            <path d="M1182.19,1419.87C1198.83,1421.56 1262.93,1470.32 1325.9,1487.02C1354.06,1494.32 1432.12,1511.25 1528.67,1481.31C1577.38,1466.2 1674.96,1437.59 1721.23,1417.24C1792.46,1385.91 1788.85,1355.51 1846.82,1353.42C1934.94,1350.23 2051.05,1453.42 2125.48,1477.99" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1251.25,1563.49C1299.38,1577.1 1378.59,1573.58 1430.19,1570.8C1467.83,1568.91 1541.68,1554.62 1578.76,1546.2C1637.12,1533.9 1745.85,1485.06 1805.31,1485.82C1874.81,1483.93 2006.99,1533.61 2073.88,1552.09" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M2029.06,1577.67C1971.55,1561.63 1859.02,1520.8 1799.56,1520.04C1748.28,1520.27 1655.69,1562.02 1605.84,1572.77C1560.25,1582.74 1470.58,1601.58 1424.76,1602.47C1363.44,1605.36 1326.03,1603.03 1316.48,1599.95" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1983.12,1603.65C1934.99,1590.04 1844.02,1561.61 1795.47,1562.17C1753.9,1562.29 1674.73,1596.62 1634.91,1604.71C1582.34,1615.12 1443.24,1638.36 1388.91,1640.81" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1936.39,1630.96C1898.85,1621.23 1821.67,1596.41 1782.83,1596.86C1749.45,1597.97 1687.94,1624.11 1655.1,1631.76C1595.22,1645.16 1497.04,1666.47 1434.52,1667.92" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1879.68,1664.68C1851.52,1657.38 1813.29,1645.15 1784.16,1645.49C1759.28,1645.05 1713.59,1666.65 1689.59,1670.19C1621.19,1685.15 1575.98,1704.72 1504.95,1707.73" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1563.89,1742.95C1612.21,1733.31 1668.3,1723.87 1716.94,1711.68C1732.76,1707.14 1796.84,1687.09 1817.89,1698.98" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1183.96,1364.27C1216.73,1400.58 1327.82,1439.41 1374.75,1451.58C1390.79,1456.12 1428.11,1456.78 1444.8,1456.22C1458.76,1455.33 1484.29,1450.68 1497.05,1448.35C1528.36,1441.81 1602.44,1432.33 1655.06,1397C1724.81,1350.18 1766.8,1266.52 1834.21,1259.2C1894.65,1252.33 2063.74,1374.79 2125.38,1369.36" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+            <path d="M1183.07,1472.08C1219.84,1494.48 1250.49,1515.17 1277.06,1522.46C1314.6,1532.19 1395.89,1535.61 1435.05,1532.61C1465.71,1531.17 1522.54,1519.98 1551.12,1513.11C1616.79,1497.82 1756.39,1439.66 1823.79,1430.87C1897.72,1421.23 2046.54,1499.01 2124.03,1521.36" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:20.83px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,63 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import BlogPost from "@/layouts/blog/BlogPost.astro";
+import { calculateReadingTime } from "@/lib/utils";
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  const blogEntries = await getCollection("blog", ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Get the blog post for this page
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
+
+// Calculate reading time
+const readingTime = calculateReadingTime(entry.body);
+
+// Check if this post is part of a series
+let seriesInfo = undefined;
+if (entry.data.series) {
+  // Get the series data
+  const seriesData = await getEntry("series", "index");
+  const series = seriesData.data.series.find(s => 
+    s.id.toLowerCase() === entry.data.series?.toLowerCase().replace(/\s+/g, "-")
+  );
+  
+  if (series) {
+    // Find the current post's index in the series
+    const currentIndex = series.posts.findIndex(postSlug => postSlug === entry.slug);
+    
+    // Get the previous and next posts in the series
+    let prevPost = undefined;
+    let nextPost = undefined;
+    
+    if (currentIndex > 0) {
+      prevPost = await getEntry("blog", series.posts[currentIndex - 1]);
+    }
+    
+    if (currentIndex < series.posts.length - 1) {
+      nextPost = await getEntry("blog", series.posts[currentIndex + 1]);
+    }
+    
+    seriesInfo = {
+      series,
+      currentIndex,
+      totalPosts: series.posts.length,
+      prevPost,
+      nextPost
+    };
+  }
+}
+---
+
+<BlogPost post={entry} readingTime={readingTime} headings={headings} seriesInfo={seriesInfo}>
+  <Content />
+</BlogPost>

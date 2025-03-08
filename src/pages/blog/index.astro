@@ -1,0 +1,133 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { getCollection, getEntry } from "astro:content";
+import { BookOpen, FolderOpen, BookMarked } from "lucide-react";
+
+// Get all blog posts that aren't drafts
+const allPosts = await getCollection("blog", ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+// Sort posts by date (newest first)
+const sortedPosts = allPosts.sort((a, b) => {
+  return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
+});
+
+// Get all categories
+const categories = [...new Set(allPosts.map(post => post.data.category))];
+
+// Get all series
+const seriesData = await getEntry("series", "index");
+const allSeries = seriesData.data.series;
+---
+
+<BaseLayout title="Blog | Coalbanks Creative" description="Thought leadership and insights on documentary-style video production in Southern Alberta">
+  <div class="container-wide py-12 md:py-16">
+    <header class="mb-12 md:mb-16">
+      <div class="flex items-center gap-2 mb-4">
+        <BookOpen className="text-primary" size={24} />
+        <h1 class="heading-lg">Blog</h1>
+      </div>
+      <p class="text-xl text-muted-foreground max-w-3xl">
+        Insights, techniques, and stories about documentary-style video production and authentic storytelling in Southern Alberta.
+      </p>
+    </header>
+
+    <!-- Categories -->
+    <section class="mb-16">
+      <h2 class="heading-md mb-6">Categories</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {categories.map((category) => (
+          <a
+            href={`/blog/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
+            class="group flex items-center gap-3 p-4 rounded-lg border bg-card hover:border-primary hover:shadow-sm transition-all"
+          >
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <FolderOpen size={20} />
+            </div>
+            <div>
+              <h3 class="font-medium group-hover:text-primary transition-colors">{category}</h3>
+              <p class="text-sm text-muted-foreground">
+                {allPosts.filter(post => post.data.category === category).length} articles
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Series -->
+    {allSeries.length > 0 && (
+      <section class="mb-16">
+        <h2 class="heading-md mb-6">Series</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {allSeries.map((series) => (
+            <a
+              href={`/blog/series/${series.id}`}
+              class="group relative overflow-hidden rounded-lg border hover:border-primary hover:shadow-md transition-all"
+            >
+              <div class="aspect-video w-full">
+                <img
+                  src={series.featuredImage}
+                  alt={series.title}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent"></div>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <BookMarked size={16} className="text-primary" />
+                  <span class="text-sm font-medium text-primary">{series.posts.length}-Part Series</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{series.title}</h3>
+                <p class="text-muted-foreground line-clamp-2">{series.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Posts List -->
+    <section>
+      <h2 class="heading-md mb-8">Recent Articles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sortedPosts.length > 0 ? (
+          sortedPosts.map((post) => (
+            <article class="border rounded-lg overflow-hidden bg-card">
+              <div class="aspect-video w-full">
+                <img 
+                  src={post.data.featuredImage} 
+                  alt={post.data.title}
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="p-6">
+                <div class="mb-2">
+                  <span class="text-primary font-medium">{post.data.category}</span>
+                </div>
+                <h2 class="text-xl font-bold mb-2">
+                  <a href={`/blog/${post.slug}`} class="hover:text-primary">
+                    {post.data.title}
+                  </a>
+                </h2>
+                <p class="text-muted-foreground mb-4 line-clamp-2">{post.data.description}</p>
+                <div class="text-sm text-muted-foreground">
+                  {new Date(post.data.publishDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+              </div>
+            </article>
+          ))
+        ) : (
+          <div class="col-span-full text-center py-12">
+            <p class="text-muted-foreground">No blog posts found.</p>
+          </div>
+        )}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

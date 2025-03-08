@@ -1,0 +1,173 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Image } from "astro:assets";
+import { formatDate } from "@/lib/utils";
+import TableOfContents from "@/components/blog/TableOfContents";
+import SeriesBanner from "@/components/blog/SeriesBanner";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  readingTime: number;
+  headings: { depth: number; slug: string; text: string }[];
+  seriesInfo?: {
+    series: {
+      id: string;
+      title: string;
+      description: string;
+      posts: string[];
+      featuredImage: string;
+    };
+    currentIndex: number;
+    totalPosts: number;
+    nextPost?: CollectionEntry<"blog">;
+    prevPost?: CollectionEntry<"blog">;
+  };
+}
+
+const { post, readingTime, headings, seriesInfo } = Astro.props;
+const { title, description, publishDate, author, featuredImage, category, tags, authorImage, series } = post.data;
+
+// Determine if we should show the table of contents (only for posts with headings)
+const showToc = headings.length > 0;
+---
+
+<BaseLayout title={`${title} | Coalbanks Creative Blog`} description={description} ogImage={featuredImage}>
+  <div class="container-wide py-8 md:py-12">
+    <!-- Breadcrumbs -->
+    <nav class="flex mb-8 text-sm text-muted-foreground" aria-label="Breadcrumb">
+      <ol class="flex items-center space-x-2">
+        <li><a href="/" class="hover:text-primary">Home</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><a href="/blog" class="hover:text-primary">Blog</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><a href={`/blog/category/${category.toLowerCase().replace(/\s+/g, '-')}`} class="hover:text-primary">{category}</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li class="text-foreground font-medium" aria-current="page">{title}</li>
+      </ol>
+    </nav>
+
+    <!-- Series Banner (if part of a series) -->
+    {seriesInfo && (
+      <SeriesBanner 
+        client:load
+        seriesInfo={seriesInfo}
+      />
+    )}
+
+    <!-- Post Header -->
+    <header class="mb-10">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-primary font-medium">{category}</span>
+        {tags && tags.length > 0 && (
+          <>
+            <span class="text-muted-foreground">•</span>
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <a 
+                  href={`/blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                  class="text-sm text-muted-foreground hover:text-primary"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      
+      <h1 class="heading-xl mb-6">{title}</h1>
+      
+      <div class="flex items-center gap-4 mb-8">
+        <div class="flex items-center gap-2">
+          {authorImage ? (
+            <img 
+              src={authorImage} 
+              alt={author} 
+              class="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <div class="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+              <span class="text-muted-foreground">{author.charAt(0)}</span>
+            </div>
+          )}
+          <div>
+            <div class="font-medium">{author}</div>
+            <div class="text-sm text-muted-foreground">
+              {formatDate(publishDate)} • {readingTime} min read
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    <div class="relative aspect-video w-full mb-10 rounded-lg overflow-hidden">
+      <img 
+        src={featuredImage} 
+        alt={title}
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Content Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <!-- Main Content -->
+      <article class="lg:col-span-8 prose prose-lg dark:prose-invert max-w-none">
+        <slot />
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-4">
+        <!-- Table of Contents -->
+        {showToc && (
+          <div class="sticky top-24">
+            <TableOfContents client:load headings={headings} />
+            
+            <!-- Share Links -->
+            <div class="mt-8 p-4 bg-muted rounded-lg">
+              <h3 class="text-lg font-semibold mb-4">Share this article</h3>
+              <div class="flex gap-4">
+                <button class="text-muted-foreground hover:text-primary" aria-label="Share on Twitter">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                </button>
+                <button class="text-muted-foreground hover:text-primary" aria-label="Share on LinkedIn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </button>
+                <button class="text-muted-foreground hover:text-primary" aria-label="Share on Facebook">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </button>
+                <button class="text-muted-foreground hover:text-primary" aria-label="Copy Link">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Custom styles for blog content */
+  .prose img {
+    @apply rounded-lg;
+  }
+  
+  .prose a {
+    @apply text-primary font-medium;
+  }
+  
+  .prose h2, .prose h3, .prose h4 {
+    @apply scroll-mt-24;
+  }
+  
+  .prose pre {
+    @apply bg-muted rounded-lg p-4 overflow-x-auto;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic;
+  }
+</style>

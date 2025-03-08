@@ -1,0 +1,144 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import BlogCard from "@/components/blog/BlogCard";
+import { getCollection, getEntry } from "astro:content";
+import { BookMarked } from "lucide-react";
+
+export async function getStaticPaths() {
+  // Get series data
+  const seriesData = await getEntry("series", "index");
+  const allSeries = seriesData.data.series;
+  
+  // Get all blog posts
+  const allPosts = await getCollection("blog", ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+  
+  // Create a path for each series
+  return allSeries.map(series => {
+    // Get posts in this series
+    const seriesPosts = allPosts.filter(post => 
+      post.data.series?.toLowerCase().replace(/\s+/g, "-") === series.id.toLowerCase() ||
+      series.posts.includes(post.slug)
+    );
+    
+    return {
+      params: { series: series.id },
+      props: { series, posts: seriesPosts },
+    };
+  });
+}
+
+const { series, posts } = Astro.props;
+
+// Sort posts by series order or date
+const sortedPosts = posts.sort((a, b) => {
+  // If both posts have seriesOrder, sort by that
+  if (a.data.seriesOrder !== undefined && b.data.seriesOrder !== undefined) {
+    return a.data.seriesOrder - b.data.seriesOrder;
+  }
+  
+  // Otherwise sort by date
+  return new Date(a.data.publishDate).getTime() - new Date(b.data.publishDate).getTime();
+});
+
+// Calculate series progress
+const totalPosts = series.posts.length;
+const publishedPosts = posts.length;
+const progressPercentage = (publishedPosts / totalPosts) * 100;
+---
+
+<BaseLayout 
+  title={`${series.title} | Coalbanks Creative Blog`}
+  description={series.description}
+  ogImage={series.featuredImage}
+>
+  <div class="container-wide py-12 md:py-16">
+    <!-- Series Header -->
+    <header class="mb-12">
+      <div class="flex items-center gap-2 mb-4">
+        <BookMarked size={24} className="text-primary" />
+        <div class="text-sm font-medium text-primary">{publishedPosts}-Part Series</div>
+      </div>
+      
+      <h1 class="heading-lg mb-6">{series.title}</h1>
+      
+      <p class="text-xl text-muted-foreground max-w-3xl mb-8">
+        {series.description}
+      </p>
+      
+      <!-- Progress bar -->
+      <div class="max-w-md mb-6">
+        <div class="flex justify-between text-sm mb-2">
+          <span>Series Progress</span>
+          <span>{publishedPosts} of {totalPosts} articles</span>
+        </div>
+        <div class="w-full h-2 bg-muted-foreground/20 rounded-full">
+          <div 
+            class="h-full bg-primary rounded-full" 
+            style={`width: ${progressPercentage}%`}
+          />
+        </div>
+      </div>
+      
+      <div>
+        <a href="/blog" class="text-primary hover:underline flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          Back to all articles
+        </a>
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    <div class="relative aspect-video w-full mb-12 rounded-lg overflow-hidden">
+      <img 
+        src={series.featuredImage} 
+        alt={series.title}
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent"></div>
+    </div>
+
+    <!-- Posts List -->
+    <div class="space-y-8">
+      <h2 class="heading-md mb-6">Articles in this Series</h2>
+      
+      {sortedPosts.map((post, index) => (
+        <div class="flex flex-col md:flex-row gap-6 border-b pb-8 last:border-0">
+          <div class="md:w-1/3 lg:w-1/4">
+            <div class="aspect-video rounded-lg overflow-hidden">
+              <img 
+                src={post.data.featuredImage} 
+                alt={post.data.title}
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="md:w-2/3 lg:w-3/4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-primary font-medium">Part {index + 1}</span>
+              <span class="text-muted-foreground">•</span>
+              <span class="text-muted-foreground">{post.data.category}</span>
+            </div>
+            
+            <h3 class="text-xl font-bold mb-2">
+              <a href={`/blog/${post.slug}`} class="hover:text-primary">
+                {post.data.title}
+              </a>
+            </h3>
+            
+            <p class="text-muted-foreground mb-4">{post.data.description}</p>
+            
+            <a 
+              href={`/blog/${post.slug}`}
+              class="text-primary hover:underline inline-flex items-center gap-1"
+            >
+              Read article
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

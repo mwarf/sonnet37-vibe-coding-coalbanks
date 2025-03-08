@@ -1,0 +1,160 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { fadeInUp, fadeIn, staggerContainer } from "@/lib/animations";
+
+// FAQ categories and items
+const faqCategories = [
+  {
+    title: "General Questions",
+    items: [
+      {
+        question: "What types of projects do you work on?",
+        answer: "We specialize in documentary-style video production, including brand stories, commercial content, event coverage, and documentary films. Our focus is on authentic storytelling that connects with audiences."
+      },
+      {
+        question: "What is your typical process for a new project?",
+        answer: "Our process typically includes discovery (understanding your story and goals), planning (developing a strategic approach), production (capturing authentic moments), post-production (crafting your story), and delivery (optimizing for your platforms)."
+      },
+      {
+        question: "How long does a typical project take to complete?",
+        answer: "Project timelines vary based on complexity and scope. A brand story might take 4-6 weeks from concept to delivery, while a documentary project could span several months. We'll provide a detailed timeline during our initial consultation."
+      },
+      {
+        question: "Do you work outside of Southern Alberta?",
+        answer: "While we're based in Lethbridge and have deep connections to Southern Alberta, we work on projects throughout Alberta and beyond. Our documentary approach travels well, and we're always excited to tell authentic stories wherever they may be."
+      }
+    ]
+  },
+  {
+    title: "Services & Pricing",
+    items: [
+      {
+        question: "How do you price your services?",
+        answer: "We develop custom quotes based on the specific needs of each project. Factors that influence pricing include production complexity, shooting days required, travel needs, and post-production requirements. Contact us for a personalized quote."
+      },
+      {
+        question: "Do you offer package deals for multiple videos?",
+        answer: "Yes, we offer package pricing for series or multiple video projects. This approach often allows for more efficient production scheduling and cost savings. We'll work with you to design a package that meets your specific needs and budget."
+      },
+      {
+        question: "What's included in your video production services?",
+        answer: "Our comprehensive service includes concept development, scriptwriting (if needed), filming with professional equipment, direction, editing, color grading, sound design, music licensing, and final delivery in formats optimized for your distribution channels."
+      },
+      {
+        question: "Do you provide raw footage after the project?",
+        answer: "We typically don't provide raw footage as part of our standard packages, as it requires significant storage and isn't optimized for viewing. However, we can discuss arrangements for raw footage archiving or transfer as part of your custom project scope."
+      }
+    ]
+  },
+  {
+    title: "Production Process",
+    items: [
+      {
+        question: "How involved will I be in the production process?",
+        answer: "We believe in collaborative storytelling. You'll be involved at key decision points including concept approval, production planning, and review of rough cuts. However, we handle all the technical aspects so you can focus on your core business."
+      },
+      {
+        question: "What should we prepare before filming day?",
+        answer: "We'll provide a detailed pre-production checklist specific to your project. Generally, this includes confirming locations, preparing interview subjects (if applicable), gathering any necessary props or materials, and ensuring access to filming locations."
+      },
+      {
+        question: "How do you ensure authentic moments in your videos?",
+        answer: "Our documentary approach focuses on creating comfortable environments where genuine interactions can happen naturally. We use a mix of planned and unplanned filming, allowing for spontaneous moments while ensuring we capture the key elements of your story."
+      },
+      {
+        question: "What happens if we need changes after seeing the first edit?",
+        answer: "Our process includes revision rounds where you can provide feedback on the rough cut. We typically include 2-3 rounds of revisions in our project scope to ensure the final product aligns perfectly with your vision and goals."
+      }
+    ]
+  },
+  {
+    title: "Technical Questions",
+    items: [
+      {
+        question: "What equipment do you use?",
+        answer: "We use professional cinema cameras, prime lenses, stabilization systems, professional audio recording equipment, and lighting gear appropriate for each project. Our equipment choices are always driven by storytelling needs rather than technical specifications."
+      },
+      {
+        question: "What resolution do you film in?",
+        answer: "We typically film in 4K resolution to ensure the highest quality and flexibility in post-production. This allows for reframing, stabilization, and future-proofing your content as display technologies continue to evolve."
+      },
+      {
+        question: "How do you deliver the final videos?",
+        answer: "We deliver final videos in formats optimized for your distribution channels, whether that's web, social media, broadcast, or presentation use. Typically this includes high-resolution master files and compressed versions ready for various platforms."
+      },
+      {
+        question: "Can you optimize videos for different social media platforms?",
+        answer: "Absolutely. We can create platform-specific versions of your videos, optimized for aspect ratios, durations, and technical specifications of different social platforms including Instagram, Facebook, LinkedIn, TikTok, and others."
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout title="Frequently Asked Questions | Coalbanks Creative">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-muted/30 py-20 md:py-28">
+    <div class="container-wide">
+      <div class="max-w-3xl">
+        <h1 class="heading-xl mb-6">Frequently Asked Questions</h1>
+        <p class="body-lg text-muted-foreground mb-8">
+          Find answers to common questions about our video production services, process, and approach to authentic storytelling.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Categories Section -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <div class="max-w-4xl mx-auto">
+        {faqCategories.map((category, categoryIndex) => (
+          <div class="mb-16 last:mb-0">
+            <h2 class="heading-lg mb-8">{category.title}</h2>
+            
+            <div class="space-y-6">
+              {category.items.map((item, itemIndex) => (
+                <motion.div 
+                  client:visible
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  transition={{ delay: itemIndex * 0.1 }}
+                  className="border border-border rounded-lg overflow-hidden"
+                >
+                  <div class="p-6">
+                    <h3 class="text-lg font-semibold mb-2">{item.question}</h3>
+                    <p class="text-muted-foreground">{item.answer}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Still Have Questions Section -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="heading-lg mb-6">Still Have Questions?</h2>
+        <p class="text-muted-foreground text-lg mb-8">
+          We're here to help. If you couldn't find the answer you're looking for, please reach out to us directly.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button client:visible size="lg" href="/contact">
+            Contact Us
+          </Button>
+          <Button client:visible size="lg" variant="outline" href="mailto:hello@coalbanks.com">
+            Email Us Directly
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

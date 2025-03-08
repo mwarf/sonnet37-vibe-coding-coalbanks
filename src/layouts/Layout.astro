@@ -1,0 +1,110 @@
+---
+import "../styles/globals.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { 
+  title, 
+  description = "Coalbanks Creative - Documentary-style video production in Southern Alberta", 
+  ogImage = "/images/og-image.jpg" 
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" as="image" href="/images/coalbanks-logo.svg" />
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <header class="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <slot name="header" />
+      </header>
+      <main class="flex-1">
+        <slot />
+      </main>
+      <footer class="border-t bg-muted/50">
+        <slot name="footer" />
+      </footer>
+    </div>
+    
+    <!-- Accessibility -->
+    <script>
+      // This script helps with keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          document.body.classList.add('user-is-tabbing');
+        }
+      });
+      
+      document.addEventListener('mousedown', () => {
+        document.body.classList.remove('user-is-tabbing');
+      });
+      
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        document.documentElement.classList.add('reduced-motion');
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Accessibility styles */
+  .user-is-tabbing :focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+  }
+  
+  .user-is-tabbing :focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  .reduced-motion * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+</style>

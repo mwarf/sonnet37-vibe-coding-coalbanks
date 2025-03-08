@@ -1,0 +1,315 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import { AnimatedCard, AnimatedCardGrid, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/animated-card";
+import { motion } from "framer-motion";
+import { fadeInUp, fadeIn, staggerContainer } from "@/lib/animations";
+
+// Portfolio categories
+const categories = [
+  { id: "all", name: "All Projects" },
+  { id: "documentary", name: "Documentary" },
+  { id: "brand-story", name: "Brand Story" },
+  { id: "commercial", name: "Commercial" },
+  { id: "event", name: "Event Coverage" },
+];
+
+// Portfolio projects
+const projects = [
+  {
+    id: "lethbridge-heritage",
+    title: "Lethbridge Heritage Project",
+    description: "A documentary series exploring the rich cultural history of Southern Alberta through the stories of long-time residents and historical archives.",
+    category: "documentary",
+    image: "/images/portfolio-placeholder-1.jpg",
+    client: "Lethbridge Historical Society",
+    year: "2023",
+    featured: true,
+  },
+  {
+    id: "mountain-view-farms",
+    title: "Mountain View Farms",
+    description: "A series of authentic brand stories showcasing the family-owned farm's sustainable practices and connection to the land over generations.",
+    category: "brand-story",
+    image: "/images/portfolio-placeholder-2.jpg",
+    client: "Mountain View Farms",
+    year: "2022",
+    featured: true,
+  },
+  {
+    id: "alberta-tech",
+    title: "Alberta Tech Innovations",
+    description: "A product commercial highlighting innovative technology solutions with a focus on real-world applications.",
+    category: "commercial",
+    image: "/images/portfolio-placeholder-3.jpg",
+    client: "Alberta Tech Innovations",
+    year: "2023",
+    featured: true,
+  },
+  {
+    id: "arts-festival",
+    title: "Southern Alberta Arts Festival",
+    description: "Complete coverage of the three-day festival, including performances, workshops, and attendee experiences.",
+    category: "event",
+    image: "/images/portfolio-placeholder-4.jpg",
+    client: "Arts Council of Alberta",
+    year: "2022",
+    featured: false,
+  },
+  {
+    id: "prairie-winds",
+    title: "Prairie Winds",
+    description: "A documentary exploring the impact of wind energy development on rural communities in Southern Alberta.",
+    category: "documentary",
+    image: "/images/portfolio-placeholder-5.jpg",
+    client: "Environmental Education Alberta",
+    year: "2021",
+    featured: false,
+  },
+  {
+    id: "local-brewery",
+    title: "Craft & Community",
+    description: "A brand story highlighting the connection between a local brewery and the community it serves.",
+    category: "brand-story",
+    image: "/images/portfolio-placeholder-6.jpg",
+    client: "Lethbridge Brewing Co.",
+    year: "2022",
+    featured: false,
+  },
+  {
+    id: "healthcare-heroes",
+    title: "Healthcare Heroes",
+    description: "A documentary series profiling healthcare workers in rural Southern Alberta communities.",
+    category: "documentary",
+    image: "/images/portfolio-placeholder-7.jpg",
+    client: "Alberta Health Services",
+    year: "2021",
+    featured: false,
+  },
+  {
+    id: "winter-festival",
+    title: "Winter Festival of Lights",
+    description: "Event coverage of the annual winter festival, capturing the magic of the season and community celebrations.",
+    category: "event",
+    image: "/images/portfolio-placeholder-8.jpg",
+    client: "City of Lethbridge",
+    year: "2022",
+    featured: false,
+  },
+];
+
+// Featured project (first one in the list)
+const featuredProject = projects.find(project => project.featured);
+---
+
+<BaseLayout title="Portfolio | Coalbanks Creative">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-muted/30 py-20 md:py-28">
+    <div class="container-wide">
+      <div class="max-w-3xl">
+        <h1 class="heading-xl mb-6">Our Work</h1>
+        <p class="body-lg text-muted-foreground mb-8">
+          Explore our portfolio of authentic stories from across Southern Alberta and beyond.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Project -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <h2 class="heading-lg mb-12">Featured Project</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+          <div class="absolute inset-0 flex items-center justify-center text-muted-foreground">
+            {/* Placeholder for featured project video/image */}
+            <span class="text-4xl">Featured</span>
+          </div>
+        </div>
+        
+        <div>
+          <div class="text-sm text-primary mb-2">{featuredProject?.category}</div>
+          <h3 class="text-3xl font-bold mb-4">{featuredProject?.title}</h3>
+          <p class="text-muted-foreground mb-6">{featuredProject?.description}</p>
+          
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div>
+              <div class="text-sm text-muted-foreground">Client</div>
+              <div class="font-medium">{featuredProject?.client}</div>
+            </div>
+            <div>
+              <div class="text-sm text-muted-foreground">Year</div>
+              <div class="font-medium">{featuredProject?.year}</div>
+            </div>
+          </div>
+          
+          <Button client:visible size="lg">Watch Project</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Portfolio Grid -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <!-- Filter Categories -->
+      <div class="flex flex-wrap gap-2 mb-12 justify-center">
+        {categories.map((category) => (
+          <Button client:visible variant="outline" size="sm" class="rounded-full">
+            {category.name}
+          </Button>
+        ))}
+      </div>
+      
+      <!-- Projects Grid -->
+      <AnimatedCardGrid client:visible className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project) => (
+          <AnimatedCard>
+            <div class="relative aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+              <div class="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                {/* Placeholder for project image */}
+                <span class="text-4xl">{project.category[0].toUpperCase()}</span>
+              </div>
+            </div>
+            <CardHeader>
+              <div class="text-sm text-primary mb-1 capitalize">{project.category.replace('-', ' ')}</div>
+              <CardTitle>{project.title}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="text-sm text-muted-foreground">Client</div>
+                  <div class="font-medium">{project.client}</div>
+                </div>
+                <div>
+                  <div class="text-sm text-muted-foreground">Year</div>
+                  <div class="font-medium">{project.year}</div>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button client:visible variant="outline" size="sm" class="w-full">View Project</Button>
+            </CardFooter>
+          </AnimatedCard>
+        ))}
+      </AnimatedCardGrid>
+    </div>
+  </section>
+  
+  <!-- Process Showcase -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <div class="text-center mb-16">
+        <h2 class="heading-lg mb-4">Our Approach</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          We believe in capturing authentic moments and telling stories that resonate with audiences. Here's a glimpse into our creative process.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div 
+          client:visible
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          className="bg-muted/30 p-8 rounded-lg"
+        >
+          <h3 class="text-xl font-semibold mb-4">Research & Discovery</h3>
+          <p class="text-muted-foreground">
+            We begin by immersing ourselves in your world, understanding your story, and identifying the authentic moments that will resonate with your audience.
+          </p>
+        </motion.div>
+        
+        <motion.div 
+          client:visible
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ delay: 0.1 }}
+          className="bg-muted/30 p-8 rounded-lg"
+        >
+          <h3 class="text-xl font-semibold mb-4">Production</h3>
+          <p class="text-muted-foreground">
+            Our documentary approach focuses on capturing genuine interactions and details that others might miss, using professional equipment and techniques.
+          </p>
+        </motion.div>
+        
+        <motion.div 
+          client:visible
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ delay: 0.2 }}
+          className="bg-muted/30 p-8 rounded-lg"
+        >
+          <h3 class="text-xl font-semibold mb-4">Storytelling</h3>
+          <p class="text-muted-foreground">
+            We carefully craft these moments into a narrative that feels true to who you are, creating an emotional connection with your audience.
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials -->
+  <section class="py-20 bg-muted/30">
+    <div class="container-wide">
+      <h2 class="heading-lg mb-12 text-center">Client Feedback</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <motion.div 
+          client:visible
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          className="bg-background p-8 rounded-lg shadow-sm"
+        >
+          <div class="text-4xl mb-4">"</div>
+          <p class="text-muted-foreground mb-6 italic">
+            Coalbanks Creative captured the essence of our organization in a way that felt completely authentic. Their documentary approach revealed aspects of our story that we hadn't even considered highlighting.
+          </p>
+          <div class="font-medium">Sarah Johnson</div>
+          <div class="text-sm text-muted-foreground">Executive Director, Lethbridge Historical Society</div>
+        </motion.div>
+        
+        <motion.div 
+          client:visible
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ delay: 0.1 }}
+          className="bg-background p-8 rounded-lg shadow-sm"
+        >
+          <div class="text-4xl mb-4">"</div>
+          <p class="text-muted-foreground mb-6 italic">
+            Working with Coalbanks was a refreshing experience. They took the time to understand our values and translated them into a visual story that resonated with our customers and community.
+          </p>
+          <div class="font-medium">Michael Thompson</div>
+          <div class="text-sm text-muted-foreground">Owner, Mountain View Farms</div>
+        </motion.div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="py-20 bg-primary text-primary-foreground">
+    <div class="container-wide">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="heading-lg mb-6">Ready to create your story?</h2>
+        <p class="text-primary-foreground/80 text-lg mb-8">
+          Let's collaborate to capture the authentic moments that make your organization special.
+        </p>
+        <Button client:visible size="lg" variant="outline" class="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+          Start Your Project
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

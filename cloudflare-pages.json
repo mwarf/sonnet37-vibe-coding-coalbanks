@@ -1,0 +1,31 @@
+{
+  "name": "coalbanks-creative",
+  "build": {
+    "command": "npm run build",
+    "output_directory": "dist",
+    "root_directory": "/"
+  },
+  "routes": [
+    {
+      "pattern": "/*",
+      "script": null,
+      "style": null
+    }
+  ],
+  "headers": {
+    "/*": {
+      "Cache-Control": "public, max-age=3600, s-maxage=86400"
+    },
+    "/assets/*": {
+      "Cache-Control": "public, max-age=31536000, immutable"
+    }
+  },
+  "environment_variables": {
+    "NODE_VERSION": "18.x"
+  },
+  "preview": {
+    "preview_branch_includes": ["main", "dev", "staging"]
+  },
+  "compatibility_flags": [],
+  "analytics_engine_datasets": []
+}
