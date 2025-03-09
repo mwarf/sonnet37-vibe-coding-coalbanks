@@ -1,0 +1,89 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+// No need to import the animated card components since we're not using them
+import { Button } from "@/components/ui/button";
+
+// Generate static paths for all categories
+export async function getStaticPaths() {
+  const categoriesData = await getEntry("portfolioCategories", "index");
+  const categories = categoriesData.data.categories;
+  
+  return categories.map(category => ({
+    params: { category: category.id },
+    props: { category },
+  }));
+}
+
+// Get the category and projects for this page
+const { category } = Astro.props;
+const allProjects = await getCollection("portfolio");
+const categoryProjects = allProjects.filter(project => 
+  project.data.category === category.id
+);
+---
+
+<BaseLayout title={`${category.name} Projects | Coalbanks Creative Portfolio`} description={category.description}>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-muted/30 py-20 md:py-28">
+    <div class="container-wide">
+      <div class="max-w-3xl">
+        <h1 class="heading-xl mb-6">{category.name} Projects</h1>
+        <p class="body-lg text-muted-foreground mb-8">
+          {category.description}
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projects Grid -->
+  <section class="py-20 bg-background">
+    <div class="container-wide">
+      <!-- Debug Info -->
+      <div class="mb-4 text-center text-muted-foreground">
+        Showing {categoryProjects.length} projects in {category.name} category
+      </div>
+      
+      <!-- Regular Grid (No Animation) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {categoryProjects.map((project) => (
+          <div class="bg-background rounded-lg shadow-sm overflow-hidden">
+            <div class="relative aspect-video w-full overflow-hidden bg-muted">
+              <img 
+                src={project.data.thumbnailImage} 
+                alt={project.data.title}
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <div class="text-sm text-primary mb-1 capitalize">{project.data.category.replace('-', ' ')}</div>
+              <h3 class="text-xl font-bold mb-2">{project.data.title}</h3>
+              <p class="text-muted-foreground text-sm mb-4">{project.data.description}</p>
+              
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <div class="text-sm text-muted-foreground">Client</div>
+                  <div class="font-medium">{project.data.client}</div>
+                </div>
+                <div>
+                  <div class="text-sm text-muted-foreground">Year</div>
+                  <div class="font-medium">{project.data.year}</div>
+                </div>
+              </div>
+              
+              <a href={`/portfolio/${project.slug}`} class="w-full block">
+                <Button client:load variant="outline" size="sm" class="w-full">View Project</Button>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="mt-12 text-center">
+        <a href="/portfolio">
+          <Button client:visible variant="outline">View All Projects</Button>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

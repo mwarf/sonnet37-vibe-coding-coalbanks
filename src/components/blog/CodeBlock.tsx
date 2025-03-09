@@ -8,7 +8,7 @@ interface CodeBlockProps {
   highlightLines?: number[];
 }
 
-export default function CodeBlock({ code, language, filename, highlightLines = [] }: CodeBlockProps) {
+export function CodeBlock({ code, language, filename, highlightLines = [] }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   
   const copyToClipboard = () => {

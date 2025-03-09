@@ -24,6 +24,26 @@
     --input: 220 13% 91%;
     --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
+    
+    /* Typography */
+    --tw-prose-body: hsl(224 71.4% 4.1%);
+    --tw-prose-headings: hsl(220.9 39.3% 11%);
+    --tw-prose-lead: hsl(220 8.9% 46.1%);
+    --tw-prose-links: hsl(220.9 39.3% 11%);
+    --tw-prose-bold: hsl(220.9 39.3% 11%);
+    --tw-prose-counters: hsl(220 8.9% 46.1%);
+    --tw-prose-bullets: hsl(220 8.9% 46.1%);
+    --tw-prose-hr: hsl(220 13% 91%);
+    --tw-prose-quotes: hsl(220.9 39.3% 11%);
+    --tw-prose-quote-borders: hsl(220 14.3% 95.9%);
+    --tw-prose-captions: hsl(220 8.9% 46.1%);
+    --tw-prose-kbd: hsl(224 71.4% 4.1%);
+    --tw-prose-kbd-bg: hsl(220 14.3% 95.9%);
+    --tw-prose-code: hsl(220.9 39.3% 11%);
+    --tw-prose-pre-code: hsl(210 20% 98%);
+    --tw-prose-pre-bg: hsl(220.9 39.3% 11%);
+    --tw-prose-th-borders: hsl(220 13% 91%);
+    --tw-prose-td-borders: hsl(220 13% 91%);
   }
  
   .dark {
@@ -46,6 +66,26 @@
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 216 12.2% 83.9%;
+    
+    /* Typography - Dark Mode */
+    --tw-prose-body: hsl(210 20% 98%);
+    --tw-prose-headings: hsl(210 20% 98%);
+    --tw-prose-lead: hsl(217.9 10.6% 64.9%);
+    --tw-prose-links: hsl(210 20% 98%);
+    --tw-prose-bold: hsl(210 20% 98%);
+    --tw-prose-counters: hsl(217.9 10.6% 64.9%);
+    --tw-prose-bullets: hsl(217.9 10.6% 64.9%);
+    --tw-prose-hr: hsl(215 27.9% 16.9%);
+    --tw-prose-quotes: hsl(210 20% 98%);
+    --tw-prose-quote-borders: hsl(215 27.9% 16.9%);
+    --tw-prose-captions: hsl(217.9 10.6% 64.9%);
+    --tw-prose-kbd: hsl(210 20% 98%);
+    --tw-prose-kbd-bg: hsl(215 27.9% 16.9%);
+    --tw-prose-code: hsl(210 20% 98%);
+    --tw-prose-pre-code: hsl(210 20% 98%);
+    --tw-prose-pre-bg: hsl(224 71.4% 4.1%);
+    --tw-prose-th-borders: hsl(215 27.9% 16.9%);
+    --tw-prose-td-borders: hsl(215 27.9% 16.9%);
   }
 }
  
@@ -65,8 +105,21 @@
     @apply container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
+  /* Typography utility classes */
   .prose-coalbanks {
-    @apply prose prose-slate max-w-none;
+    @apply prose prose-lg prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-primary prose-a:font-medium prose-a:hover:underline prose-img:rounded-lg prose-pre:bg-muted prose-pre:rounded-lg prose-pre:p-4 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:text-muted-foreground dark:prose-invert max-w-none;
+  }
+  
+  .prose-coalbanks-sm {
+    @apply prose prose-sm prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-primary prose-a:font-medium prose-a:hover:underline prose-img:rounded-lg prose-pre:bg-muted prose-pre:rounded-lg prose-pre:p-4 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:text-muted-foreground dark:prose-invert max-w-none;
+  }
+  
+  .prose-coalbanks-md {
+    @apply prose prose-base prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-primary prose-a:font-medium prose-a:hover:underline prose-img:rounded-lg prose-pre:bg-muted prose-pre:rounded-lg prose-pre:p-4 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:text-muted-foreground dark:prose-invert max-w-none;
+  }
+  
+  .prose-coalbanks-xl {
+    @apply prose prose-xl prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-primary prose-a:font-medium prose-a:hover:underline prose-img:rounded-lg prose-pre:bg-muted prose-pre:rounded-lg prose-pre:p-4 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:text-muted-foreground dark:prose-invert max-w-none;
   }
   
   .heading-xl {

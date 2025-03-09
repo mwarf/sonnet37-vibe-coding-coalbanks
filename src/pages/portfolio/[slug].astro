@@ -1,0 +1,31 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+import PortfolioProject from "@/layouts/portfolio/PortfolioProject.astro";
+
+// Generate static paths for all portfolio projects
+export async function getStaticPaths() {
+  const portfolioEntries = await getCollection("portfolio");
+
+  return portfolioEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Get the portfolio project for this page
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Get related projects if specified
+let relatedProjects: CollectionEntry<"portfolio">[] = [];
+if (entry.data.relatedProjects && entry.data.relatedProjects.length > 0) {
+  const allProjects = await getCollection("portfolio");
+  relatedProjects = allProjects.filter(project => 
+    entry.data.relatedProjects.includes(project.slug)
+  );
+}
+---
+
+<PortfolioProject project={entry} relatedProjects={relatedProjects}>
+  <Content />
+</PortfolioProject>

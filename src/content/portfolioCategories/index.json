@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "id": "documentary",
+      "name": "Documentary",
+      "description": "In-depth storytelling that captures the essence of your subject with authenticity and care."
+    },
+    {
+      "id": "brand-story",
+      "name": "Brand Story",
+      "description": "Compelling narratives that connect your audience to your brand's values and mission."
+    },
+    {
+      "id": "commercial",
+      "name": "Commercial",
+      "description": "High-quality video content that showcases your products and services with cinematic flair."
+    },
+    {
+      "id": "event",
+      "name": "Event Coverage",
+      "description": "Comprehensive documentation of your events, from intimate gatherings to large-scale productions."
+    }
+  ]
+}

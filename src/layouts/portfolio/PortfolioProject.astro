@@ -1,0 +1,190 @@
+---
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import VideoPlayer from "@/components/portfolio/VideoPlayer";
+import { motion } from "framer-motion";
+import { fadeInUp, fadeIn } from "@/lib/animations";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"portfolio">;
+  relatedProjects?: CollectionEntry<"portfolio">[];
+}
+
+const { project, relatedProjects } = Astro.props;
+const { 
+  title, description, client, year, category, 
+  featuredImage, videoUrl, videoThumbnail, 
+  tags, technologies, testimonial, gallery 
+} = project.data;
+---
+
+<BaseLayout title={`${title} | Coalbanks Creative Portfolio`} description={description} ogImage={featuredImage}>
+  <div class="container-wide py-8 md:py-12">
+    <!-- Breadcrumbs -->
+    <nav class="flex mb-8 text-sm text-muted-foreground" aria-label="Breadcrumb">
+      <ol class="flex items-center space-x-2">
+        <li><a href="/" class="hover:text-primary">Home</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><a href="/portfolio" class="hover:text-primary">Portfolio</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><a href={`/portfolio/category/${category}`} class="hover:text-primary capitalize">{category.replace('-', ' ')}</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li class="text-foreground font-medium" aria-current="page">{title}</li>
+      </ol>
+    </nav>
+
+    <!-- Project Header -->
+    <header class="mb-10">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-primary font-medium capitalize">{category.replace('-', ' ')}</span>
+        {tags && tags.length > 0 && (
+          <>
+            <span class="text-muted-foreground">•</span>
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag: string) => (
+                <span class="text-sm text-muted-foreground">#{tag}</span>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      
+      <h1 class="heading-xl mb-6">{title}</h1>
+      
+      <p class="text-xl text-muted-foreground mb-8 max-w-3xl">
+        {description}
+      </p>
+    </header>
+
+    <!-- Video Player (if available) or Featured Image -->
+    {videoUrl && videoThumbnail ? (
+      <VideoPlayer 
+        client:load 
+        videoUrl={videoUrl} 
+        thumbnailUrl={videoThumbnail} 
+        title={title} 
+      />
+    ) : (
+      <div class="relative aspect-video w-full mb-10 rounded-lg overflow-hidden">
+        <img 
+          src={featuredImage} 
+          alt={title}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <!-- Project Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-12">
+      <!-- Main Content -->
+      <div class="lg:col-span-8">
+        <article class="prose-coalbanks">
+          <slot />
+        </article>
+        
+        <!-- Project Gallery -->
+        {gallery && gallery.length > 0 && (
+          <div class="mt-12">
+            <h2 class="heading-md mb-6">Project Gallery</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {gallery.map((image: string) => (
+                <motion.div 
+                  client:visible
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeIn}
+                  className="relative aspect-video rounded-lg overflow-hidden"
+                >
+                  <img 
+                    src={image} 
+                    alt={title}
+                    class="w-full h-full object-cover"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        <!-- Related Projects -->
+        {relatedProjects && relatedProjects.length > 0 && (
+          <div class="mt-16">
+            <h2 class="heading-md mb-6">Related Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedProjects.map((related) => (
+                <motion.a 
+                  client:visible
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  href={`/portfolio/${related.slug}`}
+                  className="group block"
+                >
+                  <div class="relative aspect-video rounded-lg overflow-hidden mb-4">
+                    <img 
+                      src={related.data.thumbnailImage} 
+                      alt={related.data.title}
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 class="text-xl font-semibold group-hover:text-primary transition-colors">{related.data.title}</h3>
+                  <p class="text-muted-foreground">{related.data.description.substring(0, 100)}...</p>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-4">
+        <div class="sticky top-24 bg-muted/30 rounded-lg p-6">
+          <h3 class="text-xl font-semibold mb-6">Project Details</h3>
+          
+          <div class="space-y-4 mb-8">
+            <div>
+              <div class="text-sm text-muted-foreground">Client</div>
+              <div class="font-medium">{client}</div>
+            </div>
+            <div>
+              <div class="text-sm text-muted-foreground">Year</div>
+              <div class="font-medium">{year}</div>
+            </div>
+            <div>
+              <div class="text-sm text-muted-foreground">Category</div>
+              <div class="font-medium capitalize">{category.replace('-', ' ')}</div>
+            </div>
+            
+            {technologies && technologies.length > 0 && (
+              <div>
+                <div class="text-sm text-muted-foreground">Technologies</div>
+                <div class="flex flex-wrap gap-2 mt-1">
+                  {technologies.map((tech: string) => (
+                    <span class="text-xs bg-muted px-2 py-1 rounded-full">{tech}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <Button client:visible size="lg" class="w-full">Start Your Project</Button>
+          
+          <!-- Testimonial (if available) -->
+          {testimonial && (
+            <div class="mt-8 pt-8 border-t border-border">
+              <div class="text-4xl mb-4">"</div>
+              <p class="text-muted-foreground mb-4 italic">
+                {testimonial.quote}
+              </p>
+              <div class="font-medium">{testimonial.author}</div>
+              <div class="text-sm text-muted-foreground">{testimonial.role}</div>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

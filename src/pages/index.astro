@@ -5,28 +5,20 @@ import { AnimatedCard, AnimatedCardGrid, CardHeader, CardContent, CardFooter, Ca
 import { motion } from "framer-motion";
 import { fadeInUp, fadeIn, staggerContainer } from "@/lib/animations";
 import { Film, Theater, Video, Camera } from "lucide-react";
+import { getCollection, type CollectionEntry } from "astro:content";
 
-// Sample data for featured work
-const featuredWork = [
-  {
-    title: "Lethbridge Heritage Documentary",
-    description: "Exploring the rich history of Southern Alberta through the stories of its people.",
-    image: "/images/portfolio/sample-project-id--thumb.jpg",
-    category: "Documentary",
-  },
-  {
-    title: "Mountain View Farms Brand Story",
-    description: "Capturing the authentic journey of a family-owned farm in the foothills.",
-    image: "/images/portfolio/sample-project-id--thumb.jpg",
-    category: "Brand Story",
-  },
-  {
-    title: "Alberta Arts Festival",
-    description: "Documenting the vibrant cultural scene of the annual arts celebration.",
-    image: "/images/portfolio/sample-project-id--thumb.jpg",
-    category: "Event Coverage",
-  },
-];
+// Get featured work from portfolio collection
+const portfolioEntries = await getCollection("portfolio");
+const featuredWork = portfolioEntries
+  .filter(entry => entry.data.featured)
+  .slice(0, 3)
+  .map(entry => ({
+    title: entry.data.title,
+    description: entry.data.description,
+    image: entry.data.thumbnailImage,
+    category: entry.data.category,
+    slug: entry.slug
+  }));
 
 // Sample data for services
 const services = [
@@ -105,8 +97,12 @@ const clients = ["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Cl
           transition={{ delay: 0.4 }}
           className="flex flex-wrap gap-4"
         >
-          <Button client:load size="lg">View Our Work</Button>
-          <Button client:load size="lg" variant="outline">Get in Touch</Button>
+          <a href="/portfolio">
+            <Button client:load size="lg">View Our Work</Button>
+          </a>
+          <a href="/contact">
+            <Button client:load size="lg" variant="outline">Get in Touch</Button>
+          </a>
         </motion.div>
       </div>
     </div>
@@ -120,30 +116,39 @@ const clients = ["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Cl
           <h2 class="heading-lg mb-4">Featured Work</h2>
           <p class="text-muted-foreground max-w-2xl">Explore our recent projects showcasing authentic stories from across Southern Alberta.</p>
         </div>
-        <Button client:visible variant="outline" class="mt-4 md:mt-0">View All Projects</Button>
+        <a href="/portfolio">
+          <Button client:visible variant="outline" class="mt-4 md:mt-0">View All Projects</Button>
+        </a>
       </div>
       
-      <AnimatedCardGrid client:visible>
+      <!-- Regular Grid (No Animation) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredWork.map((project) => (
-          <AnimatedCard>
-            <div class="relative aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+          <div class="bg-background rounded-lg shadow-sm overflow-hidden">
+            <div class="relative aspect-video w-full overflow-hidden bg-muted">
               <img 
                 src={project.image} 
                 alt={project.title} 
                 class="w-full h-full object-cover"
               />
             </div>
-            <CardHeader>
-              <div class="text-sm text-primary mb-1">{project.category}</div>
-              <CardTitle>{project.title}</CardTitle>
-              <CardDescription>{project.description}</CardDescription>
-            </CardHeader>
-            <CardFooter>
-              <Button client:visible variant="outline" size="sm">Watch Project</Button>
-            </CardFooter>
-          </AnimatedCard>
+            <div class="p-6">
+              <div class="text-sm text-primary mb-1 capitalize">{project.category.replace('-', ' ')}</div>
+              <h3 class="text-xl font-bold mb-2">{project.title}</h3>
+              <p class="text-muted-foreground text-sm mb-4">{project.description}</p>
+              
+              <a href={`/portfolio/${project.slug}`}>
+                <Button client:load variant="outline" size="sm">Watch Project</Button>
+              </a>
+            </div>
+          </div>
         ))}
-      </AnimatedCardGrid>
+      </div>
+      
+      <!-- Debug Info -->
+      <div class="mt-4 text-center text-muted-foreground text-sm">
+        Showing {featuredWork.length} featured projects
+      </div>
     </div>
   </section>
   
@@ -174,7 +179,9 @@ const clients = ["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Cl
       </div>
       
       <div class="mt-12 text-center">
-        <Button client:visible size="lg">Learn More About Our Services</Button>
+        <a href="/services">
+          <Button client:visible size="lg">Learn More About Our Services</Button>
+        </a>
       </div>
     </div>
   </section>
@@ -211,9 +218,11 @@ const clients = ["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Cl
         <p class="text-primary-foreground/80 text-lg mb-8">
           Let's work together to capture the authentic moments that make your organization special.
         </p>
-        <Button client:visible size="lg" variant="outline" class="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
-          Get in Touch
-        </Button>
+        <a href="/contact">
+          <Button client:visible size="lg" variant="outline" class="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+            Get in Touch
+          </Button>
+        </a>
       </div>
     </div>
   </section>

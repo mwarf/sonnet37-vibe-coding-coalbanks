@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fadeInUp } from "@/lib/animations";
@@ -52,7 +52,38 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [isDark, setIsDark] = useState(false);
   const currentYear = new Date().getFullYear();
+  
+  // Track dark mode state
+  useEffect(() => {
+    const updateTheme = () => {
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      setIsDark(isDarkMode);
+    };
+    
+    // Initial check
+    updateTheme();
+    
+    // Set up observer for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.attributeName === 'class' &&
+          mutation.target === document.documentElement
+        ) {
+          updateTheme();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <motion.footer
@@ -65,11 +96,18 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
         {/* Brand Column */}
         <div className="space-y-4">
-          <img 
-            src="/images/coalbanks-logo.svg" 
-            alt="Coalbanks Creative" 
-            className="h-10 w-auto"
-          />
+          <div className="relative h-10 w-48">
+            <img 
+              src="/images/coalbanks-logo.svg" 
+              alt="Coalbanks Creative" 
+              className={`h-10 w-auto absolute top-0 left-0 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-100'}`}
+            />
+            <img 
+              src="/images/coalbanks-logo-reverse.svg" 
+              alt="Coalbanks Creative" 
+              className={`h-10 w-auto absolute top-0 left-0 transition-opacity duration-300 ${isDark ? 'opacity-100' : 'opacity-0'}`}
+            />
+          </div>
           <p className="text-muted-foreground max-w-xs">
             Documentary-style video production capturing authentic stories in Southern Alberta and beyond.
           </p>

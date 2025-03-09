@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fadeInDown, fadeIn } from "@/lib/animations";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 interface NavItem {
   label: string;
@@ -21,6 +22,37 @@ const navItems: NavItem[] = [
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  
+  // Track dark mode state
+  useEffect(() => {
+    const updateTheme = () => {
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      setIsDark(isDarkMode);
+    };
+    
+    // Initial check
+    updateTheme();
+    
+    // Set up observer for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.attributeName === 'class' &&
+          mutation.target === document.documentElement
+        ) {
+          updateTheme();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   // Handle scroll effect
   useEffect(() => {
@@ -60,12 +92,18 @@ export default function Header() {
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative h-10 w-auto"
+          className="relative h-10 w-48"
         >
+          {/* Use two separate images with conditional display */}
           <img 
             src="/images/coalbanks-logo.svg" 
             alt="Coalbanks" 
-            className="h-10 w-auto"
+            className={`h-10 w-auto absolute top-0 left-0 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-100'}`}
+          />
+          <img 
+            src="/images/coalbanks-logo-reverse.svg" 
+            alt="Coalbanks" 
+            className={`h-10 w-auto absolute top-0 left-0 transition-opacity duration-300 ${isDark ? 'opacity-100' : 'opacity-0'}`}
           />
         </motion.div>
       </a>
@@ -84,6 +122,7 @@ export default function Header() {
             {item.label}
           </a>
         ))}
+        <ModeToggle />
         <motion.a
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -148,6 +187,9 @@ export default function Header() {
                   {item.label}
                 </motion.a>
               ))}
+              <div className="flex justify-center my-2">
+                <ModeToggle />
+              </div>
               <motion.a
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
